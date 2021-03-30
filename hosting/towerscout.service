@@ -1,0 +1,13 @@
+[Unit]
+Description=CDC TowerScout web application
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/cooling/GM/webapp
+ExecStart=/usr/bin/python3.8 towerscout.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>TowerScout</title>
+  <link rel="stylesheet" media="screen and (min-device-width: 1200px)" href="/css/ts_styles.css">
+  <link rel="stylesheet" media="screen and (max-device-width: 1200px)" href="/css/ts_styles_mobile.css">
+</head>
+
+<body style="margin:0 0 0 0;">
+  <div id="about_div"
+    style="display:flex;z-index:2000;position:absolute; justify-content:center; align-items: center;top:0px; left:0px;width:100%;height:100%; background-color: white; opacity: 0.93;">
+    <div style="font-size: large;text-align: center;">
+      <p style="font-size: xx-large;">
+        TowerScout
+      </p>
+      (c) 2021 The TowerScout Team. All rights reserved. <br>
+      <br>
+      <p style="font-size: x-large;">
+        The TowerScout Team:
+      </p>
+      <a class="hover_inline" target="_blank" href="https://www.linkedin.com/in/karenkwong/">Karen Wong</a>,
+      <a class="hover_inline" target="_blank" href="https://www.linkedin.com/in/jia-lu-gracie-a8b5a71a/">Jia Lu</a>,
+      <a class="hover_inline" target="_blank" href="https://www.linkedin.com/in/gunnarmein/">Gunnar Mein</a>,
+      <a class="hover_inline" target="_blank" href="https://www.linkedin.com/in/thaddeussegura/">Thaddeus Segura</a><br>
+      <br>
+      <br>
+      <a class="hover" target="_blank" href='/site/index.html'>Click here to learn more about TowerScout!</a>
+    </div>
+    <div id="logocred"
+      style="position:absolute; z-index:2001;bottom:0px;right:0px;margin-bottom: 20px;margin-right: 20px;">
+      <p style="font-size: small;">
+        Logo artwork:
+      </p>
+      <a class="hover_inline" style="font-size:small;" target="_blank"
+        href="https://www.instagram.com/lcrosetto_art/">Luca Crosetto</a>
+    </div>
+    <div id="logo" style="position:absolute; z-index:2000;right:0px; height:100%;overflow:hidden">
+      <img src="img/scout_color.png" style="height:100%;opacity:0.93;">
+    </div>
+  </div>
+  <div id="fatal_div"
+    style="display:none;z-index:2000;position:absolute; justify-content:center; align-items: center;top:0px; left:0px;width:100%;height:100%; background-color: lightgrey; opacity: 0.95; color:black">
+    <div style="width:30%;height:12%">
+      <center>
+        Tile limit for this session exceeded. Please close this browser window.
+      </center>
+    </div>
+  </div>
+  <div id="progress_div"
+    style="display:none;z-index:2000;position:absolute; justify-content:center; align-items: center;top:0px; left:0px;width:100%;height:100%; background-color: lightgrey; opacity: 0.7;">
+    <div style="width:30%;height:12%">
+      <progress id="progress" style="width:100%; vertical-align:middle;height:50%" max="100" value="0">
+      </progress>
+      <br>
+      <center>
+        <button onclick="cancelRequest()">Cancel</button>
+      </center>
+    </div>
+  </div>
+  <div class="grid-container">
+
+    <div class="fheader">
+      TowerScout
+    </div>
+
+    <div class="fsearch">
+      <div id="mapsearchui" style="display:block;height:auto">
+        <span id="location">Location:&nbsp;</span>
+        <input type="text" id="search" style="display:inline;" placeholder="Search ...">
+        <span style="float: right;" id="geometry">
+          <input type='text' id='radius' style='width:20%;vertical-align:10%'>&nbsp;m
+          <button onclick="circleBoundary()" id="radiusbutton" style="vertical-align:10%;">Circle</button>
+          <span
+            style="display: inline-block; width:1px; height:80%; vertical-align:-8%; background:white; margin: 0 2px;">&nbsp;</span>
+          <button onclick="drawnBoundary()" id="drawnbutton" style="vertical-align:10%;">Custom shape</button>
+          <span
+            style="display: inline-block; width:1px; height:80%; vertical-align:-8%; background:white; margin: 0 2px;">&nbsp;</span>
+          <button onclick="clearBoundaries()" style="vertical-align:10%;">Clear</button>
+        </span>
+      </div>
+      <div id="uploadsearchui" style="display:none;">
+        File:
+        <input type="file" id="upload_file" style="width:80%;vertical-align:10%;" placeholder="Upload ...">
+      </div>
+    </div>
+
+    <div id="fversion" class="fversion" style="text-align: right;">
+      <a class="hover" onclick="about()">About TowerScout</a>
+    </div>
+
+    <div class="fmodel" style="font-size:smaller; overflow-y:hidden;white-space: nowrap; overflow-x: hidden;">
+      User interface:<br><br>
+      <form id="uis" name="uis">
+        <input type="radio" id="google" name="uis" value="google" checked>
+        <label for="google">Google Maps</label><br>
+        <input type="radio" id="bing" name="uis" value="bing">
+        <label for="bing">Bing Maps</label><br>
+        <input type="radio" id="upload" name="uis" value="upload">
+        <label for="upload">Image upload</label><br>
+      </form>
+      <br>
+      Backend map provider:<br>
+      <br>
+      <form id='providers' name='providers'>
+      </form>
+      <br>
+      Active model:<br>
+      <br>
+      <form id='engines' name='engines'>
+      </form>
+    </div>
+
+    <div class="fuploadmodel" id="fuploadmodel"
+      style="overflow-y:hidden;white-space: nowrap; overflow-x: hidden;font-size: smaller;">
+      <input type="file" id="upload_model" style="display:none" />
+      <button class="btn" onclick="document.getElementById('upload_model').click()"
+        style="width:100%; height:100%">Upload model</button>
+    </div>
+
+
+    <!--The div element for the map -->
+    <div class="fmap" style="overflow-y:hidden;white-space: nowrap; overflow-x: hidden;">
+      <div id="googleMap" style="display:block"></div>
+      <div id="bingMap" style="display:none"></div>
+      <div id="uploadMap" style="display:none; overflow-y:scroll">
+        <img id="canvas" style="width:100%;">
+      </div>
+    </div>
+
+    <div class="fdetect" id="fdetect">
+      <button id="estimate" class="btn" onclick='getObjects(true)'>Estimate tiles</button>
+      <button id="find" class="btn" onclick='getObjects()'>Find towers</button>
+    </div>
+
+    <div class="ffilter" id="ffilter" style="font-size: smaller;display:none">
+      Min. Confidence:&nbsp;<input type="range" min="0" max="100" value="35" class="slider" id="conf"
+        style="vertical-align:-25%; width:60%">
+      &nbsp;<span style="float:right">&nbsp;%</span><span id='confpercent' style="float:right">35</span><br>
+      <!-- <input type="checkbox" id="inside" checked style="vertical-align:-10%">&nbsp;Enforce boundary -->
+    </div>
+
+    <div class="freview" id="freview" style="font-size: smaller;">
+      <span style="float: left;">
+        <button onclick="Detection.prev()">&lt;</button>
+        Det. <input type="text" id="detection" style="width:30px;"
+          onkeydown="if (event.keyCode == 13) { Detection.number(); return false; }">&nbsp;
+        <button onclick="Detection.next()">&gt;</button>
+      </span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Find&nbsp;
+      <label class="switch" style="vertical-align:-8%">
+        <input type="checkbox" id="review">
+        <span class="knob round"></span>
+      </label>
+      &nbsp;Label
+      <span style="float: right;">
+        <button onclick="Tile.prev()">&lt;</button>
+        Tile <input type="text" id="tile" style="width:30px;"
+          onkeydown="if (event.keyCode == 13) { Tile.number(); return false; }">&nbsp;
+        <button onclick="Tile.next()">&gt;</button></span>
+    </div>
+
+
+    <div class="ftowers" id="ftowers" style="overflow-y: hidden;">
+      <p id="checkBoxes"
+        style="margin: 0px; overflow-y:scroll; width:100%; height:100%;white-space: nowrap; overflow-x: hidden;">
+      </p>
+    </div>
+
+    <div class="fadd" id="fadd" style="overflow-y:hidden;white-space: nowrap; overflow-x: hidden;font-size: smaller;">
+      <button id="addbutton" class="btn" onclick="currentMap.addShapes()" style="width:33%; height:100%">Add
+        locations</button>
+      <button class="btn" onclick="currentMap.clearShapes()" style="width:33%; height:100%">Clear</button>
+      <button class="btn" onclick="currentMap.clearAll()" style="width:33%; height:100%">Clear all</button>
+    </div>
+
+    <div class="fsave" id="fsave" style="overflow-y:hidden;white-space: nowrap; overflow-x: hidden;font-size: smaller;">
+      <button class="btn" onclick="download_csv(),download_kml()" style="width:33%; height:100%">Download
+        results</button>
+      <button class="btn" onclick="download_dataset()" style="width:33%; height:100%">Download
+        dataset</button>
+      <button class="btn" onclick="document.getElementById('upload_dataset').click()"
+        style="width:33%; height:100%">Restore
+        dataset</button>
+      <input type="file" id="upload_dataset" style="display:none" />
+    </div>
+
+    <div class="ftext" style="font-size: smaller;">
+      <p id="output"
+        style="margin: 0px; overflow-y:scroll; width:100%; height:100%; white-space: nowrap; overflow-x: hidden;font-size:smaller;">
+      </p>
+    </div>
+  </div>
+
+
+
+  <script src="/js/jquery-3.5.1.min.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key={{google_map_key}}&callback=initGoogleMap&libraries=places,drawing&v=weekly"
+    defer>
+    </script>
+  <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=initBingMap&key={{bing_map_key}}'
+    async defer>
+    </script>
+  <script>
+    let gak = "{{google_map_key}}";
+    let bak = "{{bing_map_key}}";
+    let dev = {{ dev }};
+  </script>
+  <script src="/js/towerscout.js"></script>
+</body>
+
+</html>
