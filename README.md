@@ -9,7 +9,7 @@ TowerScout Team:
 <a target="_blank" href="https://www.linkedin.com/in/gunnarmein/">Gunnar Mein</a>,
 <a target="_blank" href="https://www.linkedin.com/in/thaddeussegura/">Thaddeus Segura</a><br>
 
-Licensed under CC-BY-NC-SA-4.0
-(see LICENSE.TXT in the root of the repository for details)
+Licensed under <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA-4.0</a>
+(see <a target="_blank" href="https://github.com/TowerScout/TowerScout/blob/main/LICENSE.TXT">LICENSE.TXT</a> in the root of the repository for details)
 
 
