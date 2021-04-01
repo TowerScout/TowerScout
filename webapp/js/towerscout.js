@@ -1012,7 +1012,7 @@ class Detection extends PlaceRect {
         boxes += "<input type='checkbox' id='addrcb" + det.id + "' name='addrcb" + det.id;
         boxes + "' value='";
         boxes += det.id + "' checked style='display:inline;vertical-align:-10%;'"
-        boxes += " onclick='Detection_detections[" + det.id + "].selectAddr(this.selected)'>";
+        boxes += " onclick='Detection_detections[" + det.id + "].selectAddr(this.checked)'>";
         boxes += "<span class='address' id='addrlabel" + det.id + "'";
         boxes += " onclick='Detection.showDetection(" + det.id + ", true)'>"
         boxes += det.address + "</span><br>";
