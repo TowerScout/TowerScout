@@ -764,7 +764,7 @@ def write_contents_file(tmpdirname, tiles, keep_ids, meta):
             results = json.dumps(results)
             session['results'] = results
         f.write(session['results'])
-        f.write(","+str(meta))
+        f.write(","+("false" if meta else "true"))
         f.write("]")
 
 
@@ -812,9 +812,6 @@ def upload_dataset():
     # - "train" combine "images" and "labels" folders into "."
     # content.txt anywhere
     with zipfile.ZipFile(filename) as zipf:
-        #     with myzip.open('eggs.txt') as myfile:
-        #         print(myfile.read())
-
         # read previous results and tiles from content.txt and add to session
         # print(" zip contents:")
         filenames = zipf.namelist()
@@ -822,15 +819,16 @@ def upload_dataset():
         files = adapt_filenames(filenames, old_stem, new_stem)
         # print(files)
         for f_zip, f_new in zip(zipf.namelist(), files):
-            # print(" processing",f_zip,"to:",f_new)
-            with zipf.open(f_zip) as f:
-                with open(tmpdirname+"/"+f_new, "wb") as f_target:
-                    print(" writing", tmpdirname+"/"+f_new)
-                    f_target.write(f.read())
+            print(" processing",f_zip,"to:",f_new)
+            if not f_zip.endswith(".xml"):
+                with zipf.open(f_zip) as f:
+                    with open(tmpdirname+"/"+f_new, "wb") as f_target:
+                        print(" writing", tmpdirname+"/"+f_new)
+                        f_target.write(f.read())
 
     # process contents file
     results = []
-    # print(tmpdirname)
+    print("parsing contents.txt in", tmpdirname)
     with open(tmpdirname+"/contents.txt") as f:
         results = json.loads(f.read())
 
