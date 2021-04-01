@@ -70,8 +70,8 @@ class EN_Classifier:
                 output = 1 - torch.sigmoid(self.model(input).cpu()).item()
                 print(" inspected: YOLOv5 conf:",round(conf,2), end=", ")
                 print(" secondary result:", round(output,2))
-                img.save("uploads/img_for_id_"+f"{batch_id+count:02}_conf_"+str(round(conf,2))+"_p2_"+str(round(output,2))+".jpg")
-                det_img.save("uploads/id_"+f"{batch_id+count:02}_conf_"+str(round(conf,2))+"_p2_"+str(round(output,2))+".jpg")
+                #img.save("uploads/img_for_id_"+f"{batch_id+count:02}_conf_"+str(round(conf,2))+"_p2_"+str(round(output,2))+".jpg")
+                #det_img.save("uploads/id_"+f"{batch_id+count:02}_conf_"+str(round(conf,2))+"_p2_"+str(round(output,2))+".jpg")
                 p2 = output
 
             elif conf < min_conf:
