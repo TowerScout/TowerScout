@@ -160,7 +160,7 @@ def send_site_index():
 @app.route('/site/<path:path>')
 def send_site(path):
     # print("site page requested:",path)
-    return send_from_directory('../../TowerScoutSite', path)
+    return send_from_directory('../TowerScoutSite', path)
 
 # route for images
 

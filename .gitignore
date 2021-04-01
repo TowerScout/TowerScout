@@ -5,7 +5,7 @@ data.yaml
 .ipynb_checkpoints*
 .vscode*
 webapp/apikey.txt
-data/*
+webapp/data/*
 webapp/__pycache__/*
 webapp/model_params/*
 webapp/temp/*
