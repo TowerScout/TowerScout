@@ -108,7 +108,7 @@
             <p>
               Manually searching satellite imagery is hard. This is why cooling tower registries are widely considered one of the best practices in preventing and improving the response to legionellosis outbreaks. But they are labor-intensive and expensive to create, which is why very few U.S. cities have them. Public health is already overburdened with the COVID response and doesn’t have bandwidth to handle a big surge in outbreaks. Our goal is to create a tool that automatically detects cooling towers from satellite imagery.
             </p>
-            <a href="#about" class="btn-learn-more">Learn More</a>
+            <a href="#features" class="btn-learn-more">Learn More</a>
           </div>
         </div>
 
@@ -152,16 +152,17 @@
               <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
                 <h3>Training Data</h3>
                 <p class="font-italic">
-                  Our source data comes from cooling tower registries for a few cities. We pull satellite images based on cooling tower locations, and annotate images with horizontal bounding boxes.
+                  Our source data comes from cooling tower registries for a few cities. We pulled satellite images based on cooling tower locations, and annotated images with horizontal bounding boxes.
                 </p>
                 <ul>
                   <li><i class="ri-check-double-line"></i> New York</li>
                   <li><i class="ri-check-double-line"></i> Philadelphia</li>
-                  <li><i class="ri-check-double-line"></i> Seattle, Atlanta, Houston, Chicago</li>
+                  <li><i class="ri-check-double-line"></i> New York state</li>
+				  <li><i class="ri-check-double-line"></i> Seattle, Las Vegas, Baton Rouge, Disneyland Park, and Irvine, California</li>
                 </ul>
 				<h3>Data Augmentation</h3>
                 <p>
-                  We leverage Roboflow's built-in functions for basic data augmentation techniques, including flip, rotation, blur and noise. To generate synthetic data, we randomly copy and paste cooling tower objects onto backgrounds without cooling towers. Previous research has shown that copy-paste is an efficient way to create large annotated training data. We tested background images from different cities and cooling tower objects from different cities. We also applied blending effects to smooth out the edges of pasted objects. The results showed that blending improved performances.   
+                  We leveraged Roboflow's built-in functions for basic data augmentation techniques, including flip, rotation, blur and noise. To generate synthetic data, we randomly copied and pasted cooling tower objects onto backgrounds without cooling towers. Previous research has shown that copy-paste is an efficient way to create large annotated training data. We tested background images from different cities and cooling tower objects from different cities. We also applied blending effects to smooth out the edges of pasted objects. The results showed that blending improved model performances.   
                 </p>
               </div>
               <div class="col-lg-6 order-1 order-lg-2 text-center">
@@ -202,7 +203,7 @@
               <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
                 <h3>Performance</h3>
                 <p>
-                  Our objective was to minimize the False Negatives, as these would be the most detrimental to our stakeholders.
+                  Our objective was to minimize the False Negatives, as these would be the most detrimental to our stakeholders. Our best model detected aerially visible cooling towers with 95.1% sensitivity and 91.5% specificity, often identifying cooling towers that human reviewers failed to recognize on initial review.
                 </p>
 				  
 				  <!-- =======================================================
@@ -225,7 +226,7 @@
           <div class="tab-pane" id="tab-4">
             <div class="row">
               <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                <h3>Architecture</h3>
+                <h3>Interface</h3>
                 <p>
                   Towerscout is hosted on AWS in Python flask, and uses either Google Maps or Microsoft Bing maps as a UI and backend tile source. Place outline data is retrieved from OpenStreetMap, and zip code searches are enabled through 2010 census zip code.
                 </p>
@@ -279,22 +280,20 @@
               <div class="icon"><i class="las la-file-alt" style="color: #3fcdc7;"></i></div>
               <h4 class="title"><a href="">Support training data labeling and augmentation</a></h4>
             </div>
-          </div>			
-	    </div>
-
-<!--
-	      <div class="col-md-6 col-lg-8">
+          </div>	
+			
+	      <div class="col-md-6 col-lg-8 mt-5">
 			<div class="icon-box" data-aos="zoom-in-left" data-aos-delay="200">
 			  <h4 class="title"><a href="">Product Demo</a></h4>
 
 	          <iframe width="560" height="315"
 			    src="https://www.youtube.com/embed/Ptk_1Dc2iPY">
 		      </iframe>
-			</div>
-	
-          </div>  
 
--->
+	        </div>	
+          </div>  
+	    </div>  
+
      </div>
 		  
     </section><!-- End Services Section -->
@@ -302,7 +301,7 @@
 
     <!-- ======= Testimonials Section ======= -->	
 	  
-	  <!--
+	  
 		
     <section id="testimonials" class="testimonials">
       <div class="container">
@@ -317,29 +316,27 @@
           <div class="testimonial-item">
             <p>
               <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-              sentence 1.
+              The Legionella team is excited about the TowerScout resource for identifying visible cooling towers using aerial satellite imagery. During outbreak investigations, TowerScout enables us to quickly identify visible cooling towers using this automated tool rather than manually searching across images, which is a time- and personnel-intensive process. Additionally, TowerScout may enable public health to prospectively identify cooling towers for building a registry or conducting outreach. By sharing water management program and Legionella control resources with cooling tower owners, public health can work towards preventing future outbreaks of Legionnaires’ disease.
               <i class="bx bxs-quote-alt-right quote-icon-right"></i>
             </p>
             <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-            <h3>Saul Goodman</h3>
-            <h4>Ceo &amp; Founder</h4>
+            <h3>CDC Epidemiology Teamn</h3>
           </div>
 
           <div class="testimonial-item">
             <p>
               <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-              sentence 2.
+              The Legionella team is excited about the TowerScout resource for identifying visible cooling towers using aerial satellite imagery. During outbreak investigations, TowerScout enables us to quickly identify visible cooling towers using this automated tool rather than manually searching across images, which is a time- and personnel-intensive process. Additionally, TowerScout may enable public health to prospectively identify cooling towers for building a registry or conducting outreach. By sharing water management program and Legionella control resources with cooling tower owners, public health can work towards preventing future outbreaks of Legionnaires’ disease.
               <i class="bx bxs-quote-alt-right quote-icon-right"></i>
             </p>
             <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-            <h3>Sara Wilsson</h3>
-            <h4>Designer</h4>
+            <h3>CDC Environmental Health Team</h3>
           </div>
 
         </div>
 
       </div>
-    </section> --> <!-- End Testimonials Section -->
+    </section>  <!-- End Testimonials Section -->
 	
 	
 
@@ -501,49 +498,21 @@
           <p>Contact Us</p>
         </div>
 
-        <div class="row mt-5">
+        <div class="row">
 
           <div class="col-lg-4" data-aos="fade-right">
             <div class="info">
               <div class="email">
                 <i class="icofont-envelope"></i>
                 <h4>Email:</h4>
-                <p>info@towerscout.com</p>
+                <p>info.towerscout@gmail.com</p>
               </div>
             </div>
 
           </div>
 
-          <div class="col-lg-8 mt-5 mt-lg-0" data-aos="fade-left">
 
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="form-row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                  <div class="validate"></div>
-                </div>
-                <div class="col-md-6 form-group">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                  <div class="validate"></div>
-                </div>
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                <div class="validate"></div>
-              </div>
-              <div class="form-group">
-                <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                <div class="validate"></div>
-              </div>
-              <div class="mb-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
-
-          </div>
+			
 
         </div>
 
