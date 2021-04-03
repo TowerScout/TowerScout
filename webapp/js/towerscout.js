@@ -1224,6 +1224,13 @@ function createElementFromHTML(htmlString) {
 // retrieve satellite image and detect objects
 function getObjects(estimate) {
   //let center = currentMap.getCenterUrl();
+
+  if (Detection_detections.length > 0) {
+    if (!window.confirm("This will erase current detections. Proceed?")) {
+      return;
+    }
+  }
+
   let engine = $('input[name=model]:checked', '#engines').val()
   let provider = $('input[name=provider]:checked', '#providers').val()
   provider = provider.substring(0, provider.length - 9);
@@ -1851,6 +1858,12 @@ function drawCustomImage(url) {
 // 
 
 function uploadDataset() {
+  if (Detection_detections.length > 0) {
+    if (!window.confirm("This will erase current detections. Proceed?")) {
+      return;
+    }
+  }
+
   let dataset = document.getElementById("upload_dataset").files[0];
   let formData = new FormData();
 
