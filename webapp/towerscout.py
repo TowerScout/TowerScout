@@ -197,11 +197,19 @@ def send_css(path):
 @app.route('/')
 def map_func():
 
-    print("from:", request.remote_addr)
+    #for h in request.headers:
+    #    print(h)
+
+    if request.headers.getlist("X-Real-Ip"):
+        ip = request.headers.getlist("X-Real-Ip")[0]
+    else:
+        ip = request.remote_addr
+
+    print("from:", ip)
     allowed = {"47.215.225.26", "67.188.108.149", "24.126.148.202" } #, "127.0.0.1"}
     # access checks
 
-    if request.remote_addr in allowed:
+    if ip in allowed:
         pass
     elif request.args.get("pw") == "CDC":
         pass
