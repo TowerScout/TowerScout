@@ -1,3 +1,16 @@
+#
+# TowerScout
+# A tool for identifying cooling towers from satellite and aerial imagery
+#
+# TowerScout Team:
+# Karen Wong, Gunnar Mein, Thaddeus Segura, Jia Lu
+#
+# Licensed under CC-BY-NC-SA-4.0
+# (see LICENSE.TXT in the root of the repository for details)
+#
+
+# YOLOv5 detector class
+
 import math
 import torch
 from PIL import Image
@@ -34,6 +47,7 @@ class YOLOv5_Detector:
         for i in range(0, len(tiles), self.batch_size):
             # make a batch of image urls
             tile_batch = tiles[i:i+self.batch_size]
+            print("tile batch: ",tile_batch)
             img_batch = [Image.open(tile['filename']) for tile in tile_batch]
 
             # crop the tiles if requested

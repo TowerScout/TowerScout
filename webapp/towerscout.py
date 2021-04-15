@@ -18,7 +18,7 @@ from ts_gmaps import GoogleMap
 from ts_zipcode import Zipcode_Provider
 from ts_events import ExitEvents
 import ts_maps
-from flask import Flask, render_template, send_from_directory, request, session
+from flask import Flask, render_template, send_from_directory, request, session, Response
 from flask_session import Session
 from waitress import serve
 import json
@@ -170,22 +170,21 @@ def send_js(path):
     return send_from_directory('js', path)
 
 # route for images
-
-
 @app.route('/img/<path:path>')
 def send_img(path):
     return send_from_directory('img', path)
 
 # route for custom images
-
-
 @app.route('/uploads/<path:path>')
 def send_upload(path):
     return send_from_directory('uploads', path)
 
+# route for custom images
+@app.route('/rm/uploads/<path:path>')
+def remove_upload(path):
+    return os.remove('uploads/'+path)
+
 # route for js code
-
-
 @app.route('/css/<path:path>')
 def send_css(path):
     return send_from_directory('css', path)
@@ -195,6 +194,17 @@ def send_css(path):
 
 @app.route('/')
 def map_func():
+
+    print("from:", request.remote_addr)
+    allowed = {"47.215.225.26", "67.188.108.149", "24.126.148.202" } #, "127.0.0.1"}
+    # access checks
+
+    if request.remote_addr in allowed:
+        pass
+    elif request.args.get("pw") == "CDC":
+        pass
+    else:
+        return send_from_directory('templates', "unauthorized.html")
 
     if dev == 1:
         session['tiles'] = 0
@@ -514,7 +524,7 @@ def get_objects_custom():
     filename = file.filename
     file.save("uploads/" + filename)
     print(" uploaded file ")
-    results = det.detect(["uploads/"+filename])
+    results = det.detect([{'filename':"uploads/"+filename}],exit_events, id(session), crop_tiles=False)
 
     # draw result bounding boxes on image
     objects = 0
@@ -621,7 +631,7 @@ def send_dataset():
                                   keep_detections, additions, not meta)
 
     # write a contents file so we can load this again some time
-    write_contents_file(session["tmpdirname"], tiles, keep_detection_ids, meta)
+    write_contents_file(session["tmpdirname"], tiles, keep_detection_ids, additions, meta)
 
     print(" zipping data ...")
     zipdir(session['tmpdirname'], filenames)
@@ -743,7 +753,7 @@ def xml_from_label(label, size):
     return xml
 
 
-def write_contents_file(tmpdirname, tiles, keep_ids, meta):
+def write_contents_file(tmpdirname, tiles, keep_ids, additions, meta):
     with open(tmpdirname+"/contents.txt", "w") as f:
         f.write("[")
         f.write(json.dumps(tiles))
@@ -753,6 +763,8 @@ def write_contents_file(tmpdirname, tiles, keep_ids, meta):
             print(" filtering results for", len(keep_ids), "selections")
             results = json.loads(session['results'])
             tile_count = 0
+
+            # first, write write current results that are checked (i.e. in keep_ids)
             for i, result in enumerate(results):
                 if result['class_name'] != 'tile':
                     result['selected'] = (i-tile_count in keep_ids)
@@ -761,8 +773,27 @@ def write_contents_file(tmpdirname, tiles, keep_ids, meta):
                 else:
                     tile_count += 1
 
-            results = json.dumps(results)
-            session['results'] = results
+            # store the filtered results back in session
+            session['results'] = json.dumps(results)
+        
+        # now, process additions, and add them to the session results
+        # todo!!! Fix the restore bug. Note: Send more lat/long, id_in_tile info from client
+        print("Session results before additions: ", session['results'])
+        print("JSON version of additions:", json.dumps(additions))
+        if len(additions) > 0:
+            # make every this:
+            #
+            # {"tile": 0, "centerx": 0.9099609375, "centery": 0.6593624174477392, "w": 0.034375, "h": 0.037459364023982526}
+            # 
+            # into this:
+            #
+            # {"x1": -74.00627583990182, "y1": 40.71050060528311, "x2": -74.0062392291362, "y2": 40.71042470437244, 
+            #  "conf": 1.0, "class": 0, "class_name": "ct", "secondary": 1..0, 
+            #  "tile": 1, "id_in_tile": 11, "selected": true, "inside": true}
+
+            pass # todo!!!
+
+        # write the whole "current result set", modified selections, additions and all
         f.write(session['results'])
         f.write(","+("false" if meta else "true"))
         f.write("]")
@@ -807,10 +838,10 @@ def upload_dataset():
     file.save(filename)
     new_stem = tmpdirname[tmpdirname.rindex("/")+1:]
 
-    # todo: unzip dataset.zip
+    # unzip dataset.zip
     # - "empty" tiles and labels right into "."
     # - "train" combine "images" and "labels" folders into "."
-    # content.txt anywhere
+    # content.txt in "."
     with zipfile.ZipFile(filename) as zipf:
         # read previous results and tiles from content.txt and add to session
         # print(" zip contents:")

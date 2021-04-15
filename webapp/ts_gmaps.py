@@ -1,4 +1,15 @@
 #
+# TowerScout
+# A tool for identifying cooling towers from satellite and aerial imagery
+#
+# TowerScout Team:
+# Karen Wong, Gunnar Mein, Thaddeus Segura, Jia Lu
+#
+# Licensed under CC-BY-NC-SA-4.0
+# (see LICENSE.TXT in the root of the repository for details)
+#
+
+#
 # bing map class
 #
 
@@ -21,13 +32,4 @@ class GoogleMap(Map):
                   "&key=" + self.key
       return url
 
-   #
-   # checkCutOffs() 
-   #
-   # Function to check if the object was detected in the logo or copyright notice part
-   # of the image. If so, drastically reduce confidence.
-   #
-   def checkCutOffs(self, object):
-      if object['y2'] > 0.96 and (object['x1'] < 0.1 or object['x2'] > 0.46):
-         return 0.1
-      return 1
+   

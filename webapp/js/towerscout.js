@@ -1,3 +1,14 @@
+
+// TowerScout
+// A tool for identifying cooling towers from satellite and aerial imagery
+
+// TowerScout Team:
+// Karen Wong, Gunnar Mein, Thaddeus Segura, Jia Lu
+
+// Licensed under CC-BY-NC-SA-4.0
+// (see LICENSE.TXT in the root of the repository for details)
+
+
 // TowerScout.js
 // client-side logic
 
@@ -1851,7 +1862,19 @@ function uploadImage() {
 function drawCustomImage(url) {
   let img = document.getElementById('canvas');
   img.src = url;
+  if (img.complete) {
+    removeCustomImage(url)
+  } else {
+    img.addEventListener('load', () => {removeCustomImage(url);}, {once:true});
+  }
 }
+
+function removeCustomImage(url) {
+  fetch('/rm'+url, { method: "GET"});
+}
+
+
+
 
 //
 // upload dataset functionality
