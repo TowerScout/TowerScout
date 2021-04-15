@@ -74,7 +74,7 @@
       <div class="carousel-item active">
         <div class="carousel-container">
           <h2 class="animate__animated animate__fadeInDown">Welcome to <span>TowerScout</span></h2>
-          <p class="animate__animated fanimate__adeInUp">A tool that automatically detects cooling towers from satellite imagery</p>
+          <p class="animate__animated fanimate__adeInUp">A tool that automatically detects cooling towers from aerial imagery</p>
           <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">Read More</a>
         </div>
       </div>
@@ -97,16 +97,15 @@
         <div class="row content" data-aos="fade-up">
           <div class="col-lg-6">
             <p>
-              Legionella bacteria can cause severe respiratory disease with a 1 in 10 fatality rate. These bacteria grow in the water of cooling towers of large buildings, especially when these systems are off. Turning these systems back on can blow bacteria mist around the neighborhood, causing disease outbreaks. The current Legionella outbreak investigation processes include:
+              Legionnaires’ disease is a severe pneumonia with a 1 in 10 fatality rate. When a potential outbreak occurs in a community, cooling towers are often suspected as the source because they can harbor <i>Legionella</i> bacteria. 
             </p>
-            <ul>
-              <li><i class="ri-check-double-line"></i> Investigators manually search satellite imagery or a pre-existing registry for nearby cooling towers.</li>
-              <li><i class="ri-check-double-line"></i> investigators test towers for bacterial contamination and treat them to stop the source of the outbreak</li>
-            </ul>
+            <p>
+			  Outbreak investigators often manually search aerial imagery to find cooling towers. This requires expertise and time. 
+            </p>
           </div>
           <div class="col-lg-6 pt-4 pt-lg-0">
             <p>
-              Manually searching satellite imagery is hard. This is why cooling tower registries are widely considered one of the best practices in preventing and improving the response to legionellosis outbreaks. But they are labor-intensive and expensive to create, which is why very few U.S. cities have them. Public health is already overburdened with the COVID response and doesn’t have bandwidth to handle a big surge in outbreaks. Our goal is to create a tool that automatically detects cooling towers from satellite imagery.
+              TowerScout uses machine learning to automatically detect visible cooling towers from aerial imagery. This accelerates outbreak response efforts so that investigators can treat contaminated cooling towers faster, stopping further spread of disease.
             </p>
             <a href="#features" class="btn-learn-more">Learn More</a>
           </div>
@@ -141,7 +140,7 @@
           <li class="nav-item col-3" data-aos="zoom-in" data-aos-delay="300">
             <a class="nav-link" data-toggle="tab" href="#tab-4">
               <i class="ri-store-line"></i>
-              <h4 class="d-none d-lg-block">Interface</h4>
+              <h4 class="d-none d-lg-block">Application</h4>
             </a>
           </li>
         </ul>
@@ -151,18 +150,18 @@
             <div class="row">
               <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
                 <h3>Training Data</h3>
-                <p class="font-italic">
-                  Our source data comes from cooling tower registries for a few cities. We pulled satellite images based on cooling tower locations, and annotated images with horizontal bounding boxes.
+                <p>
+                  The model uses data from several cities to learn how to detect cooling towers. Our training data come from all over the United States and include dense urban residential areas, business districts, industrial complexes, and smaller cities. 
                 </p>
-                <ul>
+				  <!--
+				<ul>
                   <li><i class="ri-check-double-line"></i> New York</li>
                   <li><i class="ri-check-double-line"></i> Philadelphia</li>
                   <li><i class="ri-check-double-line"></i> New York state</li>
 				  <li><i class="ri-check-double-line"></i> Seattle, Las Vegas, Baton Rouge, Disneyland Park, and Irvine, California</li>
-                </ul>
-				<h3>Data Augmentation</h3>
+                </ul> -->
                 <p>
-                  We leveraged Roboflow's built-in functions for basic data augmentation techniques, including flip, rotation, blur and noise. To generate synthetic data, we randomly copied and pasted cooling tower objects onto backgrounds without cooling towers. Previous research has shown that copy-paste is an efficient way to create large annotated training data. We tested background images from different cities and cooling tower objects from different cities. We also applied blending effects to smooth out the edges of pasted objects. The results showed that blending improved model performances.   
+                  Through a process of data augmentation, we improve how our model performs on the visually diverse communities across the country. Basic augmentation techniques generate slightly altered versions of the original image, and synthetic augmentation creates new examples that focus on difficult, rare, or unusual cooling towers or landscapes.   
                 </p>
               </div>
               <div class="col-lg-6 order-1 order-lg-2 text-center">
@@ -173,16 +172,18 @@
           <div class="tab-pane" id="tab-2">
             <div class="row">
               <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                <h3>YOLOV5</h3>
+                <h3>YOLOV5 and EfficientNet</h3>
                 <p class="font-italic">
-                  Model comparison
+                  An optimized two-stage model
                 </p>
                 <p>
-                  Towerscout is built on an object detection algorithm called YOLOv5.  (“You Only Look Once.”)  As the title suggests, the model is a “single shot detector”, meaning it looks at the whole image at once and tries to identify the relevant areas of interest.  This makes it extremely fast, while still providing fantastic performance.
+                  TowerScout uses a two-stage model to help it find every cooling tower without also flagging other objects that resemble towers. The first stage uses YOLOv5 ("You Only Look Once"), a neural network model that identifies objects. As the title suggests, the model is a “single shot detector”, meaning it looks at the whole image at once and tries to identify the relevant areas of interest. This makes it extremely fast, while still providing fantastic performance.
 				</p>
 				<p>
-
-					We specifically leveraged the largest version of YOLOv5, called YOLOv5 XL, with pretrained weights from the COCO dataset.  The model was fine-tuned for 100 epochs on a V100 GPU, and performance was evaluated using a custom evaluation metric which is aligned to the true evaluation process of our stakeholders.  An optimal inference confidence threshold range was also established and used to create the default search band within the user inference.
+					We specifically leveraged the largest version of YOLOv5, called YOLOv5 XL, with pretrained weights from the COCO dataset. The model was fine-tuned for 100 epochs on a V100 GPU, and performance was evaluated using a custom evaluation metric which is aligned to the true evaluation process of our stakeholders. An optimal inference confidence threshold range was also established and used to create the default search band within the user inference.
+                </p>
+				<p>
+					We trained YOLOv5 to avoid missing towers, even if that meant it was overly sensitive. Potential cooling towers detected by YOLOv5 were cropped and sent to the second stage, EfficientNet B5. EfficientNet is a neural network model that classifies images into groups; in this case, it classifies the detected objects into real cooling towers versus imposters, such as patio umbrellas and skylights. 
                 </p>
 				<!-- =======================================================
                 <ul>
@@ -194,7 +195,9 @@
   				======================================================== -->
               </div>
               <div class="col-lg-6 order-1 order-lg-2 text-center">
-                <img src="assets/img/features-2.png" alt="" class="img-fluid">
+				<img src="assets/img/finetune.gif" alt="" class="img-fluid">
+                <img src="assets/img/features-2.gif" alt="" class="img-fluid">
+				  
               </div>
             </div>
           </div>
@@ -203,7 +206,7 @@
               <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
                 <h3>Performance</h3>
                 <p>
-                  Our objective was to minimize the False Negatives, as these would be the most detrimental to our stakeholders. Our best model detected aerially visible cooling towers with 95.1% sensitivity and 91.5% specificity, often identifying cooling towers that human reviewers failed to recognize on initial review.
+                  Our objective was to avoid missing towers (false negatives), as this type of error would be the most detrimental for outbreak investigators. Our best model detected aerially visible cooling towers with 95.1% sensitivity and 90.0% specificity, often identifying cooling towers that human reviewers failed to recognize on initial review.
                 </p>
 				  
 				  <!-- =======================================================
@@ -225,11 +228,13 @@
           </div>
           <div class="tab-pane" id="tab-4">
             <div class="row">
-              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                <h3>Interface</h3>
+              <div>
+                <h3>Application</h3>
                 <p>
                   Towerscout is hosted on AWS in Python flask, and uses either Google Maps or Microsoft Bing maps as a UI and backend tile source. Place outline data is retrieved from OpenStreetMap, and zip code searches are enabled through 2010 census zip code.
                 </p>
+				 <p>  </p>
+
 				  <!--
                 <p class="font-italic">
                   HIGHLIGHTS.
@@ -243,7 +248,12 @@
 -->
               </div>
               <div class="col-lg-6 order-1 order-lg-2 text-center">
-                <img src="assets/img/features-4.png" alt="" class="img-fluid">
+				<img src="assets/img/architecture.png" alt="" class="img-fluid">
+				
+              </div>
+			<div class="col-lg-6 order-2 order-lg-2 text-center">
+                <img src="assets/img/interface.png" alt="" class="img-fluid">
+				
               </div>
             </div>
           </div>
@@ -257,34 +267,36 @@
       <div class="container">
 
         <div class="section-title" data-aos="zoom-out">
-          <h2>Product demo</h2>
-          <p>What we do offer</p>
+          <h2>PRODUCT FEATURES</h2>
+          <p>What we offer</p>
         </div>
 
         <div class="row">
           <div class="col-lg-4 col-md-6">
             <div class="icon-box" data-aos="zoom-in-left">
               <div class="icon"><i class="las la-basketball-ball" style="color: #ff689b;"></i></div>
-              <h4 class="title"><a href="">Identify cooling towers in real-time</a></h4>
-              <!-- <p class="description">Identify cooling towers in real-time</p> -->
+              <h4 class="title">Efficiency</h4>
+               <p class="description">Identify cooling towers in minutes</p> 
             </div>
           </div>
           <div class="col-lg-4 col-md-6 mt-5 mt-md-0">
             <div class="icon-box" data-aos="zoom-in-left" data-aos-delay="100">
               <div class="icon"><i class="las la-book" style="color: #e9bf06;"></i></div>
-              <h4 class="title"><a href="">Support search by radius, geographic area, or manual selection</a></h4>
+              <h4 class="title">Flexible Search</h4>
+				<p class="description">Search by radius, custom polygon, or place outline</p> 
             </div>
           </div>		
           <div class="col-lg-4 col-md-6 mt-5 mt-lg-0 ">
             <div class="icon-box" data-aos="zoom-in-left" data-aos-delay="200">
               <div class="icon"><i class="las la-file-alt" style="color: #3fcdc7;"></i></div>
-              <h4 class="title"><a href="">Support training data labeling and augmentation</a></h4>
+              <h4 class="title">Registry Creation</h4>
+				<p class="description">Customize datasets to create cooling tower registries or new training data</p> 
             </div>
           </div>	
 			
 	      <div class="col-md-6 col-lg-8 mt-5">
 			<div class="icon-box" data-aos="zoom-in-left" data-aos-delay="200">
-			  <h4 class="title"><a href="">Product Demo</a></h4>
+			  <h4 class="title"><a href="">Onboarding Video</a></h4>
 				
 				<iframe width="560" height="315" src="https://www.youtube.com/embed/arVGjexxTDM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -306,7 +318,7 @@
 
         <div class="section-title" data-aos="zoom-out">
           <h2>Testimonials</h2>
-          <p>What they are saying about us</p>
+          <p>What our stakeholders are saying about us</p>
         </div>
 
 		<div class="row">
@@ -314,23 +326,11 @@
           <div class="testimonial-item">
             <p>
               <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-              The Legionella team is excited about the TowerScout resource for identifying visible cooling towers using aerial satellite imagery. During outbreak investigations, TowerScout enables us to quickly identify visible cooling towers using this automated tool rather than manually searching across images, which is a time- and personnel-intensive process. Additionally, TowerScout may enable public health to prospectively identify cooling towers for building a registry or conducting outreach. By sharing water management program and Legionella control resources with cooling tower owners, public health can work towards preventing future outbreaks of Legionnaires’ disease.
-              <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              The <em style="font-style: normal;">Legionella</em> team is excited about the TowerScout resource for identifying visible cooling towers using aerial satellite imagery. During outbreak investigations, TowerScout enables us to quickly identify visible cooling towers using this automated tool rather than manually searching across images, which is a time- and personnel-intensive process. Additionally, TowerScout may enable public health to prospectively identify cooling towers for building a registry or conducting outreach. By sharing water management program and <em style="font-style: normal;">Legionella</em> control resources with cooling tower owners, public health can work towards preventing future outbreaks of Legionnaires’ disease.
             </p>
             <img src="assets/img/testimonials/testimonials-1.png" class="testimonial-img" alt="">
-            <h3>CDC Epidemiology Team</h3>
+            <h3>CDC <i>Legionella</i> Team</h3>
           </div>
-
-          <div class="testimonial-item">
-            <p>
-              <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-              The Legionella team is excited about the TowerScout resource for identifying visible cooling towers using aerial satellite imagery. During outbreak investigations, TowerScout enables us to quickly identify visible cooling towers using this automated tool rather than manually searching across images, which is a time- and personnel-intensive process. Additionally, TowerScout may enable public health to prospectively identify cooling towers for building a registry or conducting outreach. By sharing water management program and Legionella control resources with cooling tower owners, public health can work towards preventing future outbreaks of Legionnaires’ disease.
-              <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-            </p>
-            <img src="assets/img/testimonials/testimonials-2.png" class="testimonial-img" alt="">
-            <h3>CDC Environmental Health Team</h3>
-          </div>
-
         </div>
 
       </div>
@@ -350,61 +350,52 @@
         <ul class="faq-list">
 
           <li data-aos="fade-up" data-aos-delay="100">
-            <a data-toggle="collapse" class="" href="#faq1">How to search a new area?<i class="icofont-simple-up"></i></a>
+            <a data-toggle="collapse" class="" href="#faq1">How do I search a new area?<i class="icofont-simple-up"></i></a>
             <div id="faq1" class="collapse show" data-parent=".faq-list">
               <p>
-                In the top bar, we can search for a place, and then zoom and pan as with most maps. We can also center a particular point and ask to mark a boundary of perhaps 200 meters. Lastly, we can define a search area by drawing an arbitrary polygon on the screen.
+                In the search bar, you can search for a place, and then zoom and pan as with most maps. You can also center a particular point and create a search circle by defining the radius in meters. Lastly, you can define a search area by drawing a custom polygon on the screen.
               </p>
             </div>
           </li>
 
           <li data-aos="fade-up" data-aos-delay="200">
-            <a data-toggle="collapse" href="#faq2" class="collapsed">How to save search results?<i class="icofont-simple-up"></i></a>
+            <a data-toggle="collapse" href="#faq2" class="collapsed">How do I manually correct results?<i class="icofont-simple-up"></i></a>
             <div id="faq2" class="collapse" data-parent=".faq-list">
               <p>
-                We ask the server to execute our search. It will download satellite image tiles of the area we marked, and feed them to our detection algorithm. When the results come back, we can view them individually on the map and click them to show their address and confidence level. We can unselect towers that we think are false positives, and we can mark additional objects that we think the tool missed. The review bar on the right can help us quickly flip through tiles or detections. When we are satisfied with the results of our search, we can download the results and receive them as both a CSV file … and a KML file to view in Google MyMaps or Google Earth.
+                After clicking “Find towers,” you can click towers on the map to show their address and the model’s confidence level that it is a cooling tower. Unselect objects that are not towers by unchecking the box in the results panel. If the model missed a tower, mark it by drawing a box around it, and then click “Add locations.” The review bar on the right can help us quickly flip through tiles or detections. When we are satisfied with the results of our search, we can download the results and receive them as both a CSV file and a KML file to view in Google MyMaps or Google Earth.
+
               </p>
             </div>
           </li>
 
           <li data-aos="fade-up" data-aos-delay="300">
-            <a data-toggle="collapse" href="#faq3" class="collapsed">How to label new training data?<i class="icofont-simple-up"></i></a>
+            <a data-toggle="collapse" href="#faq3" class="collapsed">How do I save search results?<i class="icofont-simple-up"></i></a>
             <div id="faq3" class="collapse" data-parent=".faq-list">
               <p>
-                The tool has a labeling mode. When we switch into this mode, the tool will show all results on any tile scanned, regardless of whether they are in the specified boundary or not. It will also lower the confidence threshold to make sure we are not missing any detections it made. We can now flip through all tiles to mark any false negative – missing towers, that is – and after that process is complete we can flip through all detections to root out any false positives. When we are done, we download the dataset and we can see that we have our data neatly organized in labelled images for further training, and empty tiles and coded results for further work.
+                Click “Download results” to save CSV and KML files of your results. This will include any manually corrections you have made. Click “Download dataset” to download image tiles and annotations. 
               </p>
             </div>
           </li>
 			
-<!--		
+		
 
           <li data-aos="fade-up" data-aos-delay="400">
-            <a data-toggle="collapse" href="#faq4" class="collapsed">item 4 <i class="icofont-simple-up"></i></a>
+            <a data-toggle="collapse" href="#faq4" class="collapsed">How do I load a dataset for viewing and editing?<i class="icofont-simple-up"></i></a>
             <div id="faq4" class="collapse" data-parent=".faq-list">
               <p>
-                content 4.
+                A dataset that has been previously customized and downloaded can be restored by uploading the ZIP file with the “Restore dataset” button. 
               </p>
             </div>
           </li>
 
           <li data-aos="fade-up" data-aos-delay="500">
-            <a data-toggle="collapse" href="#faq5" class="collapsed">item 5 <i class="icofont-simple-up"></i></a>
+            <a data-toggle="collapse" href="#faq5" class="collapsed">How do I use Label mode?<i class="icofont-simple-up"></i></a>
             <div id="faq5" class="collapse" data-parent=".faq-list">
               <p>
-                content 5
+				Label mode is useful when creating a cooling tower registry or a new training dataset. When you switch into this mode, the tool will show all results on any tile scanned, even if only part of the tile is inside the specified search boundary. It will also lower the confidence threshold to make sure you are not missing any detections. You can review all tiles by clicking the “>” button next to “Tile” to manually add any missed towers., After that process is complete, you can review all detections using the “>” button next to “Det.” to quickly uncheck any objects that are not towers. When you are finished, download the dataset (click “Download dataset”); this includes labelled images which can be used for additional model training and empty tiles. You can also click “Download results” to save a CSV or KML that includes the addresses of the towers. 
               </p>
             </div>
           </li>
-
-          <li data-aos="fade-up" data-aos-delay="600">
-            <a data-toggle="collapse" href="#faq6" class="collapsed">item 6 <i class="icofont-simple-up"></i></a>
-            <div id="faq6" class="collapse" data-parent=".faq-list">
-              <p>
-                content 6.
-              </p>
-            </div>
-          </li>
--->
 
         </ul>
 
@@ -417,7 +408,7 @@
 
         <div class="section-title" data-aos="zoom-out">
           <h2>Team</h2>
-          <p>Our Hardworking Team</p>
+          <p>OUR DATA SCIENCE TEAM</p>
         </div>
 
         <div class="row">
@@ -497,24 +488,37 @@
         </div>
 
         <div class="row">
-
-          <div class="col-lg-4" data-aos="fade-right">
-            <div class="info">
-              <div class="email">
-                <i class="icofont-envelope"></i>
-                <h4>Email:</h4>
-                <p>info.towerscout@gmail.com</p>
-              </div>
-            </div>
-
-          </div>
-
-
+		
+			 <div class="col-lg-4" data-aos="fade-right">
+			  
+				<div class="info">
+				  <div class="address">
+					<i class="icofont-envelope"></i>
+					<h4>Email:</h4>
+					<p>info.towerscout@gmail.com</p>
+				  </div>
+				</div>
+			 </div>
+				
+			 <div class="col-lg-8" data-aos="fade-left">
+				 <div class="info">
+					<div class="address">
+					<i class="icofont-github"></i>
+					<p> </p>
+					<h4>Project Repository:</h4>
+					<p><a href="https://github.com/TowerScout/TowerScout">https://github.com/TowerScout/TowerScout</a></p>
+					</div>
+				  </div>
+					
+			 </div>
 			
 
+				
         </div>
 
-      </div>
+
+    </div>
+
     </section><!-- End Contact Section -->
 
   </main><!-- End #main -->
