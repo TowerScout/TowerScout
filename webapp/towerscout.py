@@ -182,7 +182,9 @@ def send_upload(path):
 # route for custom images
 @app.route('/rm/uploads/<path:path>')
 def remove_upload(path):
-    return os.remove('uploads/'+path)
+    os.remove('uploads/'+path)
+    print(" upload deleted")
+    return "ok"
 
 # route for js code
 @app.route('/css/<path:path>')
