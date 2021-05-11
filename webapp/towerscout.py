@@ -41,7 +41,7 @@ from functools import reduce
 dev = 0
 
 MAX_TILES = 1000
-MAX_TILES_SESSION = 10000
+MAX_TILES_SESSION = 100000
 
 torch.set_num_threads(1)
 print("Pytorch threads:", torch.get_num_threads())
@@ -200,21 +200,21 @@ def map_func():
     #for h in request.headers:
     #    print(h)
 
-    if request.headers.getlist("X-Real-Ip"):
-        ip = request.headers.getlist("X-Real-Ip")[0]
-    else:
-        ip = request.remote_addr
+    #if request.headers.getlist("X-Real-Ip"):
+    #    ip = request.headers.getlist("X-Real-Ip")[0]
+    #else:
+    #    ip = request.remote_addr
 
-    print("from:", ip)
-    allowed = {"47.215.225.26", "67.188.108.149", "24.126.148.202" } #, "127.0.0.1"}
+    #print("from:", ip)
+    #allowed = {"47.215.225.26", "67.188.108.149", "24.126.148.202" } #, "127.0.0.1"}
     # access checks
 
-    if ip in allowed:
-        pass
-    elif request.args.get("pw") == "CDC":
-        pass
-    else:
-        return send_from_directory('templates', "unauthorized.html")
+    #if ip in allowed:
+    #    pass
+    #elif request.args.get("pw") == "CDC":
+    #    pass
+    #else:
+    #    return send_from_directory('templates', "unauthorized.html")
 
     if dev == 1:
         session['tiles'] = 0

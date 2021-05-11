@@ -1277,6 +1277,7 @@ function getObjects(estimate) {
   // first, play the request, but get an estimate of the number of tiles
   xhr = $.post({
     url: "/getobjects",
+    timeout: 300*1000,
     data: {
       bounds: bounds,
       //center: center,
