@@ -1275,17 +1275,16 @@ function getObjects(estimate) {
   Tile.resetAll();
 
   // first, play the request, but get an estimate of the number of tiles
-  xhr = $.post({
-    url: "/getobjects",
-    data: {
-      bounds: bounds,
-      //center: center,
-      engine: engine,
-      provider: provider,
-      polygons: boundaries,
-      estimate: "yes"
-    },
-    success: function (result) {
+  const formData = new FormData();
+  formData.append('bounds', bounds);
+  formData.append('engine',engine);
+  formData.append('provider',provider );
+  formData.append('polygons', boundaries);
+  formData.append('estimate', "yes");
+
+  fetch("/getobjects",  { method: "POST", body: formData, })
+    .then(result => result.text()) 
+    .then(result => {
       if (Number(result) === -1) {
         fatalError("Tile limit for this session exceeded. Please close browser to continue.")
         return;
@@ -1307,26 +1306,19 @@ function getObjects(estimate) {
       // now, the actual request
 
       Detection.resetAll();
-      xhr = $.post({
-        url: "/getobjects",
-        data: {
-          bounds: bounds,
-          //center: center,
-          engine: engine,
-          provider: provider,
-          polygons: boundaries,
-        },
-        error: function (xhr, e, c) { console.log(e + ": " + c); disableProgress(0, 0); },
-        success: result => {
+      formData.delete("estimate");
+      fetch("/getobjects", { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(result => {
           processObjects(result, startTime);
-        },
-      });
-    }
-  });
+        })
+        .catch(e => {
+          console.log(e + ": "); disableProgress(0, 0);
+        });
+    });
 }
 
 function processObjects(result, startTime) {
-  result = JSON.parse(result);
   conf = Number(document.getElementById("conf").value);
   if (result.length === 0) {
     console.log(":::::: Area too big. Please " + (radius !== "" ? "enter a smaller radius." : "zoom in."));
@@ -1897,7 +1889,7 @@ function uploadDataset() {
 
   formData.append("dataset", dataset);
   fetch('/uploaddataset', { method: "POST", body: formData })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(response => {
       processObjects(response, startTime);
     })
