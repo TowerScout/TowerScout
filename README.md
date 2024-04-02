@@ -7,9 +7,9 @@ TowerScout Team:
 <a target="_blank" href="https://www.linkedin.com/in/karenkwong/">Karen Wong</a>,
 <a target="_blank" href="https://www.linkedin.com/in/jia-lu-gracie-a8b5a71a/">Jia Lu</a>,
 <a target="_blank" href="https://www.linkedin.com/in/gunnarmein/">Gunnar Mein</a>,
-<a target="_blank" href="https://www.linkedin.com/in/thaddeussegura/">Thaddeus Segura</a><br>.
-<a target="_blank" href="https://www.linkedin.com/in/drnooj/">Fred Nugen</a><br> and
-<a target="_blank" href="https://www.linkedin.com/in/atodeschini/">Alberto Todeschini</a><br> and
+<a target="_blank" href="https://www.linkedin.com/in/thaddeussegura/">Thaddeus Segura</a>.<br>
+<a target="_blank" href="https://www.linkedin.com/in/drnooj/">Fred Nugen</a>,
+<a target="_blank" href="https://www.linkedin.com/in/atodeschini/">Alberto Todeschini</a>, and
 <a target="_blank" href="https://www.linkedin.com/in/wcedens/">Chris Edens</a> helped guide the project.
 
 Licensed under <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA-4.0</a>
