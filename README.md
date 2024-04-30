@@ -1,6 +1,6 @@
 # TowerScout
 
-A tool for identifying cooling towers from satellite and aerial imagery.  
+A tool for identifying cooling towers from satellite and aerial imagery.  Cooling towers are potential sources of _Legionella_ bacteria, which causes Legionnaire's disease.  TowerScout has been utilized in over 12 investigations of outbreaks of Legionnaire's disease across 8 states since 2021.  It can be used after outbreaks to identify potential sources of _Legionella_, and it can be used before outbreaks to build and update a registry of cooling towers to aid future investigations.
 
 ## About TowerScout 
 
